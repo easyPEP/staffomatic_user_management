@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:5.6.47
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    volumes:
+      - db_data:/var/lib/mysql
+  api:
+    build: .
+    command: bash -c "bundle install; bundle exec rails s -p 3189 -b 0.0.0.0"
+    volumes:
+      - .:/app
+    ports:
+      - "3189:3189"
+    depends_on:
+      - mysql
+volumes:
+  db_data:
